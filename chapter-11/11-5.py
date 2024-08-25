@@ -41,11 +41,20 @@ class Vector2d:
         return bool(abs(self))  # перевірка довжини на bool
 
     @classmethod
-    def frombytes(cls, octets): # self - відсутнє, бо передаєм сам клас(cls)
-        typecode = chr(octets[0]) # читаємо typecode з 1ого байту
-        memv = memoryview(octets[1:]).cast(typecode) # ств обьект memoryview з двійк послідовності і переводимо його в тип typecode
-        return cls(*memv) # Розпаковуєм і ств обьект, який необх конструктуру
-    
-    def __format__(self, fmt_spec: str = '') -> str:
-        components = (format(c, fmt_spec) for c in self) # fmt_spec приминям до кожн компонента вектора і будуєм ітеріруемий обьект
-        return '({}, {})'.format(*components) # підставл відформатовані підстроки в шаблон (x, y)
+    def frombytes(cls, octets):  # self - відсутнє, бо передаєм сам клас(cls)
+        typecode = chr(octets[0])  # читаємо typecode з 1ого байту
+        memv = memoryview(octets[1:]).cast(
+            typecode
+        )  # ств обьект memoryview з двійк послідовності і переводимо його в тип typecode
+        return cls(*memv)  # Розпаковуєм і ств обьект, який необх конструктуру
+
+    def __format__(self, fmt_spec: str = "") -> str:
+        if fmt_spec.endswith("p"):  # формат закінч на букву 'p'
+            fmt_spec = fmt_spec[:-1]  # видалити p
+            coords = (abs(self), self.angle())  # кортеж для полярних коорд
+            outer_fmt = "<{} {}"
+        else:
+            coords = self
+            outer_fmt = "({}, {})"
+        components = (format(c, fmt_spec) for c in coords)
+        return outer_fmt.format(*components)
