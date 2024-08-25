@@ -46,4 +46,6 @@ class Vector2d:
         memv = memoryview(octets[1:]).cast(typecode) # ств обьект memoryview з двійк послідовності і переводимо його в тип typecode
         return cls(*memv) # Розпаковуєм і ств обьект, який необх конструктуру
     
-    
+    def __format__(self, fmt_spec: str = '') -> str:
+        components = (format(c, fmt_spec) for c in self) # fmt_spec приминям до кожн компонента вектора і будуєм ітеріруемий обьект
+        return '({}, {})'.format(*components) # підставл відформатовані підстроки в шаблон (x, y)
