@@ -3,7 +3,7 @@ import reprlib
 import math
 
 
-class Vector2d:
+class Vector:
     typecode = "d"
 
     def __init__(self, components) -> None:
@@ -23,7 +23,7 @@ class Vector2d:
         components = components[
             components.find("[") : -1
         ]  # Видал префікс array('d',[ і також видал остан скобку ')'
-        return "Vector({components})"
+        return f"Vector({components})"
 
     def __str__(self):
         return str(tuple(self))
