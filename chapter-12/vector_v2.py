@@ -1,6 +1,7 @@
 from array import array
 import reprlib
 import math
+import operator
 
 
 class Vector:
@@ -52,6 +53,14 @@ class Vector:
 
     def __len__(self):
         return len(self._components)
-    
-    def __getitem__(self, index):
-        return self._components[index]
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):  # якшо аргумент типу slice
+            cls = type(self)  # отримуєм клас екземп(тобто Vector)
+            return cls(
+                self._components[key]
+            )  # отр новий екземпл класу, зарахунок зрізу масива _components
+        index = operator.index(key)  # якшо можливо отр index по key
+        return self._components[
+            index
+        ]  # то просто повертаємо один конкретний елем з _components
