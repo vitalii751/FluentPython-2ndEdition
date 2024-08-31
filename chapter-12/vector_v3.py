@@ -2,6 +2,7 @@ from array import array
 import reprlib
 import math
 import operator
+import functools
 
 
 class Vector:
@@ -99,3 +100,10 @@ class Vector:
         super().__setattr__(
             name, value
         )  # випадок по дефолту: виклик метод __setattr__ суперкласа для отримання стандартної поведінки
+
+    def __eq__(self, other): # метод НЕ змін АЛЕ він тре для хешування
+        return tuple(self) == tuple(other)
+
+    def __hash__(self):
+        hashes = (hash(x) for x in self._components) # ств генератор, бо економе память
+        return functools.reduce(operator.xor, hashes, 0) # 0 - ініціалізатор
