@@ -81,3 +81,21 @@ class Vector:
             return self._components[pos]
         msg = f"{cls.__name__!r} object has no attribute {name!r}"  # якшо за межами то помилка
         raise AttributeError(msg)
+
+    def __setattr__(self, name, value) -> None:
+        cls = type(self)
+        if len(name) == 1:  # спец обробка односимв атр
+            if (
+                name in cls.__match_args__
+            ):  # коли атр є в списку в співствл, то одне повідомл
+                error = "readonly attribute {attr_name!r}"
+            elif name.islower():  # якшо строчна буква
+                error = "cant set attribute 'a' to 'z' in {cls.__name__!r}"
+            else:
+                error = ""  # в ін випадках поле пусте
+        if error:  # якшо поле не пусте
+            msg = error.format(cls_name=cls.__name__, attr_name=name)
+            raise AttributeError(msg)
+        super().__setattr__(
+            name, value
+        )  # випадок по дефолту: виклик метод __setattr__ суперкласа для отримання стандартної поведінки
