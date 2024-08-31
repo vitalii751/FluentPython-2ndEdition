@@ -101,14 +101,9 @@ class Vector:
             name, value
         )  # випадок по дефолту: виклик метод __setattr__ суперкласа для отримання стандартної поведінки
 
-    def __eq__(self, other): 
-        if len(self) != len(other): # довж повинні бути однакові + це необх бо функц zip автоматом би обрубила один з ітер обьектів більший по довжині
-            return False
-        for a, b in zip(self, other): 
-            if a != b: # як тільки нерівн, то все бб
-                return False
-        return True
+    def __eq__(self, other):
+        return len(self) == len(other) and all(a == b for a, b in zip(self, other))
 
     def __hash__(self):
-        hashes = (hash(x) for x in self._components) # ств генератор, бо економе память
-        return functools.reduce(operator.xor, hashes, 0) # 0 - ініціалізатор
+        hashes = (hash(x) for x in self._components)  # ств генератор, бо економе память
+        return functools.reduce(operator.xor, hashes, 0)  # 0 - ініціалізатор
